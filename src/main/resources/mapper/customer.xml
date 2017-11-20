@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.domain.Customer">
+    <resultMap id="customer" type="com.domain.Customer">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="phoneCode" column="PHONE_CODE" jdbcType="VARCHAR"/>
+        <result property="sex" column="SEX" jdbcType="VARCHAR"/>
+        <result property="idCard" column="ID_CARD" jdbcType="VARCHAR"/>
+        <result property="address" column="ADDRESS" jdbcType="VARCHAR"/>
+        <result property="balance" column="BALANCE" jdbcType="DECIMAL"/>
+        <result property="isShutdown" column="IS_SHUTDOWN" jdbcType="BOOLEAN"/>
+        <result property="isStopArrears" column="IS_STOP_ARREARS" jdbcType="BOOLEAN"/>
+        <result property="starStates" column="STAR_STATES" jdbcType="BIT"/>
+    </resultMap>
+    <!--所有行名-->
+    <sql id="insertColumns">
+        NAME,PHONE_CODE,SEX,ID_CARD,ADDRESS,BALANCE,IS_SHUTDOWN,IS_STOP_ARREARS,STAR_STATES
+    </sql>
+
+    <sql id="allColumns">
+        ID,NAME,PHONE_CODE,SEX,ID_CARD,ADDRESS,BALANCE,IS_SHUTDOWN,IS_STOP_ARREARS,STAR_STATES
+    </sql>
+
+
+    <!--查询所有客户信息-->
+    <select id="getAllCustomer" resultType="com.domain.Customer" resultMap="customer">
+        SELECT <include refid="allColumns"/> FROM CUSTOMER
+    </select>
+
+    <!--根据客户对象插入客户信息-->
+    <insert id="insertCustomer"  parameterType="com.domain.Customer">
+        INSERT INTO CUSTOMER(<include refid="insertColumns"/>)
+        VALUES (#{name},#{phoneCode},#{sex},#{idCard},#{address},#{balance},#{isShutdown},#{isStopArrears},#{starStates})
+    </insert>
+
+    <!--修改客户信息-->
+    <update id="updateCustomer" parameterType="com.domain.Customer">
+        UPDATE CUSTOMER SET NAME = #{name},PHONE_CODE = #{phoneCode},SEX = #{sex},
+        ID_CARD = #{idCard},ADDRESS = #{address},BALANCE = #{balance},IS_SHUTDOWN = #{isShutdown},
+        IS_STOP_ARREARS = #{isStopArrears},STAR_STATES = #{starStates}
+        WHERE ID = #{id}
+    </update>
+
+    <!--根据客户信息对象删除对应客户-->
+    <delete id="deleteCustomer" parameterType="com.domain.Customer">
+        DELETE FROM CUSTOMER WHERE id = ${id}
+    </delete>
+
+    <!--根据客户ID查询对应客户信息-->
+    <select id="getCustomer" resultMap="customer" parameterType="java.lang.Long">
+        SELECT <include refid="allColumns"/> FROM CUSTOMER WHERE id=${id}
+    </select>
+</mapper>

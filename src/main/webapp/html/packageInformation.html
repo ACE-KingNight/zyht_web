@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>套餐信息</title>
+    <link type="text/css" rel="stylesheet" href="http://localhost:8080/zyhtweb/css/bootstrap.min.css"/>
+</head>
+<body>
+<div style="float: right;margin: 3% 10% 2% 0">
+    <button type="button" class="btn btn-info btn-lg">添加</button>
+    <button type="button" class="btn btn-warning btn-lg">修改</button>
+    <button type="button" class="btn btn-danger btn-lg">删除</button>
+</div>
+<div style="margin-top: 3%">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th><input type="checkbox" hidden="hidden"></th>
+            <th>序号</th>
+            <th>套餐编号</th>
+            <th>套餐名</th>
+            <th>套餐描述</th>
+            <th>短信数</th>
+            <th>通话时长</th>
+            <th>流量</th>
+            <th>是否有彩铃</th>
+            <th>是否有来电显示</th>
+            <th>月租</th>
+            <th>套餐开始时间</th>
+            <th>套餐结束时间</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="packageInformation in packageInformations">
+            <td><input name="packageInformationId" type="checkbox" value={{packageInformation.id}} /></td>
+            <td>{{$index+1}}</td>
+            <td>{{packageInformation.mealNumber}}</td>
+            <td>{{packageInformation.mealName}}</td>
+            <td>{{packageInformation.mealDescribe}}</td>
+            <td>{{packageInformation.messageNumber}}</td>
+            <td>{{packageInformation.minuteNumber}}</td>
+            <td>{{packageInformation.flowNumber}}{{packageInformation.unit}}</td>
+            <td>{{packageInformation.isCall}}</td>
+            <td>{{packageInformation.isColorBack}}</td>
+            <td>{{packageInformation.monthlyRent}}</td>
+            <td>{{packageInformation.mealStartDate}}</td>
+            <td>{{packageInformation.mealEndDate}}</td>
+        </tr>
+    </table>
+</div>
+<script src="http://localhost:8080/zyhtweb/js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://localhost:8080/zyhtweb/js/bootstrap.min.js"></script>
+</body>
+</html>

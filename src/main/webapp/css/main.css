@@ -1,0 +1,15 @@
+.leftNav{
+    margin-top: 10%;
+    width: 17%;
+    height: 100%;
+    font-size: 18px;
+    float: left;
+}
+.view{
+    float: right;
+    width: 83%;
+}
+body{
+    background-image: url("../image/background.jpg");
+    background-size: cover;
+}

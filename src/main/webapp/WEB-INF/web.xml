@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <display-name>zyht_web</display-name>
+    <!--<distributable />-->
+    <!-- 设置Spring的配置文件启动路径 -->
+    <!--<context-param>-->
+        <!--<param-name>contextConfigLocation</param-name>-->
+        <!--<param-value>-->
+            <!--classpath*:conf/app-context.xml-->
+        <!--</param-value>-->
+    <!--</context-param>-->
+    <!--设置profile运行环境变量 -->
+    <!--<context-param>-->
+        <!--<param-name>spring.profiles.default</param-name>-->
+        <!--<param-value>test</param-value>-->
+    <!--</context-param>-->
+
+
+    <!-- spring容器启动 -->
+    <!--<listener>-->
+        <!--<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+    <!--</listener>-->
+
+    <!--&lt;!&ndash; spring request &ndash;&gt;-->
+    <!--<listener>-->
+        <!--<listener-class>-->
+            <!--org.springframework.web.context.request.RequestContextListener-->
+        <!--</listener-class>-->
+    <!--</listener>-->
+
+    <!-- session listener -->
+    <!--<listener>-->
+        <!--<listener-class>-->
+            <!--com.yineng.platform.listener.ServerStartListener-->
+        <!--</listener-class>-->
+    <!--</listener>-->
+
+    <!-- session listener -->
+    <!--<listener>-->
+        <!--<listener-class>-->
+            <!--com.yineng.platform.sysLog.SessionListener-->
+        <!--</listener-class>-->
+    <!--</listener>-->
+
+    <!-- springMVC 配置 -->
+    <!--<servlet>-->
+        <!--<servlet-name>action</servlet-name>-->
+        <!--<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
+        <!--<init-param>-->
+            <!--<param-name>contextConfigLocation</param-name>-->
+            <!--<param-value>classpath*:/conf/app-action.xml</param-value>-->
+        <!--</init-param>-->
+        <!--<load-on-startup>3</load-on-startup>-->
+        <!--&lt;!&ndash;设置上传文件限制&ndash;&gt;-->
+        <!--<multipart-config>-->
+            <!--<max-file-size>104857600</max-file-size>-->
+            <!--<max-request-size>104857600</max-request-size>-->
+        <!--</multipart-config>-->
+    <!--</servlet>-->
+    <!--配置springmvc的url访问路径 -->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>action</servlet-name>-->
+        <!--<url-pattern>*.htm</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--&lt;!&ndash; 拦截二级域名，解析，实现sql路由 &ndash;&gt;-->
+    <!--<filter>-->
+        <!--<filter-name>implicitParameterFilter</filter-name>-->
+        <!--<filter-class>com.yineng.cloud.dubbo.ImplicitParameterFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>implicitParameterFilter</filter-name>-->
+        <!--<url-pattern>*.htm</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <!-- cometd服务器消息推送配置start -->
+    <!--<servlet>-->
+    <!--<servlet-name>cometd</servlet-name>-->
+    <!--<servlet-class>org.cometd.server.CometDServlet</servlet-class>-->
+    <!--<load-on-startup>4</load-on-startup>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>cometd</servlet-name>-->
+    <!--<url-pattern>/cometd/*</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet>-->
+    <!--<servlet-name>oort</servlet-name>-->
+    <!--<servlet-class>com.yineng.platform.message.YnOortMulticastConfigServlet</servlet-class>-->
+    <!--<init-param>-->
+    <!--<param-name>oort.port</param-name>-->
+    <!--<param-value>80</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+    <!--<param-name>oort.multicast.advertiseInterval</param-name>-->
+    <!--<param-value>60000</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+    <!--<param-name>oort.multicast.connectTimeout</param-name>-->
+    <!--<param-value>30000</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+    <!--<param-name>oort.channels</param-name>-->
+    <!--<param-value>/message/*,/notice</param-value>-->
+    <!--</init-param>-->
+    <!--<load-on-startup>5</load-on-startup>-->
+    <!--</servlet>-->
+
+    <!--<filter>-->
+    <!--<filter-name>cross-origin</filter-name>-->
+    <!--<filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+    <!--<filter-name>cross-origin</filter-name>-->
+    <!--<url-pattern>/cometd/*</url-pattern>-->
+    <!--</filter-mapping>-->
+    <!-- cometd服务器消息推送配置end -->
+
+    <!--<filter>-->
+        <!--<filter-name>encodingFilter</filter-name>-->
+        <!--<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>-->
+        <!--<init-param>-->
+            <!--<param-name>encoding</param-name>-->
+            <!--<param-value>UTF-8</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>forceEncoding</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>encodingFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <!--<filter>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<url-pattern>/logout</url-pattern>-->
+    <!--</filter-mapping>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<url-pattern>/j_spring_security_check</url-pattern>-->
+    <!--</filter-mapping>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<url-pattern>/j_spring_cas_security_check</url-pattern>-->
+    <!--</filter-mapping>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<url-pattern>*.htm</url-pattern>-->
+    <!--</filter-mapping>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<url-pattern>*.jsp</url-pattern>-->
+    <!--</filter-mapping>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>springSecurityFilterChain</filter-name>-->
+        <!--<url-pattern>*.html</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>pageEncodingFilter</filter-name>
+        <filter-class>com.config.PageEncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>pageEncodingFilter</filter-name>
+        <url-pattern>*.htm</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>testFilter</filter-name>
+        <filter-class>com.config.TestFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>testFilter</filter-name>
+        <url-pattern>*.htm</url-pattern>
+    </filter-mapping>
+    <session-config>
+        <session-timeout>120</session-timeout>
+    </session-config>
+    <servlet>
+        <servlet-name>test</servlet-name>
+        <servlet-class>Test</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/serlvet/test.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>testserlvet</servlet-name>
+        <servlet-class>com.controller.TestServlet</servlet-class>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>张三</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>testserlvet</servlet-name>
+        <url-pattern>/serlvet/testserlvet.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>customerselect</servlet-name>
+        <servlet-class>com.controller.CustomerSelectServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>customerselect</servlet-name>
+        <url-pattern>/serlvet/customerselect.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>customerupdate</servlet-name>
+        <servlet-class>com.controller.CustomerUpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>customerupdate</servlet-name>
+        <url-pattern>/serlvet/customerupdate.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>testtwo</servlet-name>
+        <servlet-class>com.controller.TetstTwoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>testtwo</servlet-name>
+        <url-pattern>/serlvet/testtwo.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PackageInformation</servlet-name>
+        <servlet-class>com.controller.PackageInformationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PackageInformation</servlet-name>
+        <url-pattern>/serlvet/packageinformation.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>customerdelete</servlet-name>
+        <servlet-class>com.controller.CustomerDeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>customerdelete</servlet-name>
+        <url-pattern>/serlvet/customerdelete.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>customer</servlet-name>
+        <servlet-class>com.controller.CustomerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>customer</servlet-name>
+        <url-pattern>/serlvet/customerservlet.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PackPurInformation</servlet-name>
+        <servlet-class>com.controller.PackPurInformationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PackPurInformation</servlet-name>
+        <url-pattern>/serlvet/packpurinformation.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>call</servlet-name>
+        <servlet-class>com.controller.CallServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>call</servlet-name>
+        <url-pattern>/serlvet/callservlet.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>message</servlet-name>
+        <servlet-class>com.controller.MessagesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>message</servlet-name>
+        <url-pattern>/serlvet/messageservlet.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>callrecords</servlet-name>
+        <servlet-class>com.controller.CallRecordsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>callrecords</servlet-name>
+        <url-pattern>/serlvet/callrecordsservlet.htm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>messagerecords</servlet-name>
+        <servlet-class>com.controller.MessageRecorderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>messagerecords</servlet-name>
+        <url-pattern>/servlet/messagerecorderservlet.htm</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <!--<welcome-file>login.htm</welcome-file>-->
+        <welcome-file>index.jsp</welcome-file>
+        <!--<welcome-file>/pages/lms/portal/index.html#/resource/portalHomePage</welcome-file>-->
+    </welcome-file-list>
+    <context-param>
+        <param-name>username</param-name>
+        <param-value>wzx</param-value>
+    </context-param>
+    <context-param>
+        <param-name>password</param-name>
+        <param-value>123456</param-value>
+    </context-param>
+    <!-- 设置Spring的配置文件启动路径 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:applicationContext.xml
+        </param-value>
+    </context-param>
+    <!--设置profile运行环境变量 -->
+
+    <!-- spring容器启动 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- spring request -->
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+</web-app>

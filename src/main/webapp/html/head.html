@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <link type="text/css" rel="stylesheet" href="http://localhost:8080/zyhtweb/css/bootstrap.min.css"/>
+    <script src="http://localhost:8080/zyhtweb/js/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://localhost:8080/zyhtweb/js/bootstrap.min.js"></script>
+    <title>头</title>
+</head>
+<body>
+<!--<div style="height: 20%;width: 100%;margin-top: 1%">-->
+    <!--<img style="height: 50px;width: 55px;margin-left: 12%" src="http://localhost:8080/zyhtweb/image/timg.jpg" alt="logo"/>-->
+    <!--<ul style="float: right" class="nav nav-pills">-->
+        <!--<li class="active"><a href="#">Home</a></li>-->
+        <!--<li><a href="#">SVN</a></li>-->
+        <!--<li><a href="#">iOS</a></li>-->
+        <!--<li><a href="#">VB.Net</a></li>-->
+        <!--<li><a href="#">Java</a></li>-->
+        <!--<li><a href="#">PHP</a></li>-->
+    <!--</ul>-->
+<!--</div>-->
+<div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>客户名</th>
+            <th>电话号码</th>
+            <th>性别</th>
+            <th>身份证号</th>
+            <th>余额</th>
+            <th>地址</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="customer in customers">
+            <td>{{$index+1}}</td>
+            <td>{{customer.name}}</td>
+            <td>{{customer.phoneCode}}</td>
+            <td>{{customer.sex}}</td>
+            <td>{{customer.idCard}}</td>
+            <td>{{customer.balance}}</td>
+            <td>{{customer.address}}</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

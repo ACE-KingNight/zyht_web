@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.domain.PackPurInformation">
+    <resultMap id="packPurInformation" type="com.domain.PackPurInformation">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="buyTime" column="BUY_TIME" jdbcType="TIMESTAMP"/>
+        <result property="amountOfPayment" column="AMOUNT_OF_PAYMENT" jdbcType="DECIMAL"/>
+        <result property="isSuccess" column="IS_SUCCESS" jdbcType="BOOLEAN"/>
+        <result property="effectTime" column="EFFECT_TIME" jdbcType="TIMESTAMP"/>
+        <association property="customer" column="CUSTOMER_ID" javaType="com.domain.Customer">
+            <id property="id" column="CU_ID" jdbcType="BIGINT"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+            <result property="phoneCode" column="PHONE_CODE" jdbcType="VARCHAR"/>
+            <result property="sex" column="SEX" jdbcType="VARCHAR"/>
+            <result property="idCard" column="ID_CARD" jdbcType="VARCHAR"/>
+            <result property="address" column="ADDRESS" jdbcType="VARCHAR"/>
+            <result property="balance" column="BALANCE" jdbcType="DECIMAL"/>
+            <result property="isShutdown" column="IS_SHUTDOWN" jdbcType="BOOLEAN"/>
+            <result property="isStopArrears" column="IS_STOP_ARREARS" jdbcType="BOOLEAN"/>
+            <result property="starStates" column="STAR_STATES" jdbcType="BIT"/>
+        </association>
+        <association property="packageInformation" column="PACKAGE_INFORMATION_ID" javaType="com.domain.PackageInformation">
+            <id property="id" column="PI_ID" jdbcType="BIGINT"/>
+            <result property="mealNumber" column="MEAL_NUMBER" jdbcType="VARCHAR"/>
+            <result property="mealName" column="MEAL_NAME" jdbcType="VARCHAR"/>
+            <result property="mealDescribe" column="MEAL_DESCRIBE" jdbcType="VARCHAR"/>
+            <result property="messageNumber" column="MESSAGE_NUMBER" jdbcType="INTEGER"/>
+            <result property="minuteNumber" column="MINUTE_NUMBER" jdbcType="INTEGER"/>
+            <result property="flowNumber" column="FLOW_NUMBER" jdbcType="DOUBLE"/>
+            <result property="unit" column="UNIT" jdbcType="VARCHAR"/>
+            <result property="isCall" column="IS_CALL" jdbcType="BOOLEAN"/>
+            <result property="isColorBack" column="IS_COLOR_BACK" jdbcType="BOOLEAN"/>
+            <result property="monthlyRent" column="MONTHLY_RENT" jdbcType="DECIMAL"/>
+            <result property="mealStartDate" column="MEAL_START_DATE" jdbcType="DATE"/>
+            <result property="mealEndDate" column="MEAL_END_DATE" jdbcType="DATE"/>
+        </association>
+    </resultMap>
+
+    <!--套餐购买信息列及其别名-->
+    <sql id="allColumns">
+        ppi.ID ID,ppi.BUY_TIME BUY_TIME,ppi.AMOUNT_OF_PAYMENT AMOUNT_OF_PAYMENT,
+        ppi.IS_SUCCESS IS_SUCCESS,ppi.EFFECT_TIME EFFECT_TIME,
+    </sql>
+
+    <!--客户信息列及其别名-->
+    <sql id="customerColumns">
+        cu.ID CU_ID,cu.NAME NAME,cu.PHONE_CODE PHONE_CODE,cu.SEX SEX,cu.ID_CARD ID_CARD,
+        cu.ADDRESS ADDRESS,cu.BALANCE BALANCE,cu.IS_SHUTDOWN IS_SHUTDOWN,
+        cu.IS_STOP_ARREARS IS_STOP_ARREARS,cu.STAR_STATES STAR_STATES,
+    </sql>
+
+    <!--套餐信息列及其别名-->
+    <sql id="packageInformationColumns">
+         pi.ID PI_ID,pi.MEAL_NUMBER MEAL_NUMBER,pi.MEAL_NAME MEAL_NAME,pi.MEAL_DESCRIBE MEAL_DESCRIBE,
+         pi.MESSAGE_NUMBER MESSAGE_NUMBER,pi.MINUTE_NUMBER MINUTE_NUMBER,pi.FLOW_NUMBER FLOW_NUMBER,pi.UNIT UNIT,
+         pi.IS_CALL IS_CALL,pi.IS_COLOR_BACK IS_COLOR_BACK,pi.MONTHLY_RENT MONTHLY_RENT,
+         pi.MEAL_START_DATE MEAL_START_DATE,pi.MEAL_END_DATE MEAL_END_DATE
+    </sql>
+
+    <!--插入列-->
+    <sql id="insertColumns">
+        BUY_TIME,CUSTOMER_ID,PACKAGE_INFORMATION_ID,AMOUNT_OF_PAYMENT,IS_SUCCESS,EFFECT_TIME
+    </sql>
+
+    <!--查询所有套餐信息-->
+    <select id="getAllPackPurInformation" resultMap="packPurInformation" parameterType="java.lang.Long">
+        SELECT <include refid="allColumns"/><include refid="customerColumns"/><include refid="packageInformationColumns"/>
+        FROM pack_pur_information ppi
+        INNER JOIN customer cu ON ppi.CUSTOMER_ID=cu.ID
+        INNER JOIN package_information pi ON ppi.PACKAGE_INFORMATION_ID=pi.ID
+        WHERE
+        cu.ID = #{0};
+    </select>
+
+    <!--插入一条新的套餐信息-->
+    <insert id="insertPackPurInformation" parameterType="com.domain.PackPurInformation">
+        INSERT INTO pack_pur_information(<include refid="insertColumns"/>) VALUES (
+        #{buyTime},#{customer.id},#{packageInformation.id},#{amountOfPayment},#{isSuccess},#{effectTime})
+    </insert>
+
+    <!--根据套餐信息ID修改套餐信息-->
+    <update id="updatePackPurInformation" parameterType="com.domain.PackPurInformation">
+        UPDATE PACK_PUR_INFORMATION SET BUY_TIME =#{buyTime},CUSTOMER_ID=#{customer.id},PACKAGE_INFORMATION_ID=#{packageInformation.id},
+        AMOUNT_OF_PAYMENT=#{amountOfPayment},IS_SUCCESS=#{isSuccess},EFFECT_TIME=#{effectTime} WHERE ID = #{id}
+    </update>
+
+    <delete id="deletePackPurInformation" parameterType="java.lang.Long">
+        DELETE FROM PACK_PUR_INFORMATION WHERE id = ${id}
+    </delete>
+
+</mapper>

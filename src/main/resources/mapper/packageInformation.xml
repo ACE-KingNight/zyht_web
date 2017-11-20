@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.domain.PackageInformation">
+    <resultMap id="packageInformation" type="com.domain.PackageInformation">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="mealNumber" column="MEAL_NUMBER" jdbcType="VARCHAR"/>
+        <result property="mealName" column="MEAL_NAME" jdbcType="VARCHAR"/>
+        <result property="mealDescribe" column="MEAL_DESCRIBE" jdbcType="VARCHAR"/>
+        <result property="messageNumber" column="MESSAGE_NUMBER" jdbcType="INTEGER"/>
+        <result property="minuteNumber" column="MINUTE_NUMBER" jdbcType="INTEGER"/>
+        <result property="flowNumber" column="FLOW_NUMBER" jdbcType="DOUBLE"/>
+        <result property="unit" column="UNIT" jdbcType="VARCHAR"/>
+        <result property="isCall" column="IS_CALL" jdbcType="BOOLEAN"/>
+        <result property="isColorBack" column="IS_COLOR_BACK" jdbcType="BOOLEAN"/>
+        <result property="monthlyRent" column="MONTHLY_RENT" jdbcType="DECIMAL"/>
+        <result property="mealStartDate" column="MEAL_START_DATE" jdbcType="DATE"/>
+        <result property="mealEndDate" column="MEAL_END_DATE" jdbcType="DATE"/>
+    </resultMap>
+    <sql id="allColumns">
+        ID,MEAL_NUMBER,MEAL_NAME,MEAL_DESCRIBE,MESSAGE_NUMBER,MINUTE_NUMBER
+        ,FLOW_NUMBER,UNIT,IS_CALL,IS_COLOR_BACK,MONTHLY_RENT,MEAL_START_DATE,MEAL_END_DATE
+    </sql>
+    <sql id="insertColumns">
+        MEAL_NUMBER,MEAL_NAME,MEAL_DESCRIBE,MESSAGE_NUMBER,MINUTE_NUMBER
+        ,FLOW_NUMBER,UNIT,IS_CALL,IS_COLOR_BACK,MONTHLY_RENT,MEAL_START_DATE,MEAL_END_DATE
+    </sql>
+
+
+    <select id="getAllPackageInformation" resultType="com.domain.PackageInformation" resultMap="packageInformation">
+        SELECT <include refid="allColumns"/> FROM PACKAGE_INFORMATION
+    </select>
+
+    <insert id="insertPackageInformation"  parameterType="com.domain.PackageInformation">
+        INSERT INTO PACKAGE_INFORMATION(<include refid="insertColumns"/>) VALUES
+        (#{mealNumber},#{mealName},#{mealDescribe},#{messageNumber},#{minuteNumber},
+        #{flowNumber},#{unit},#{isCall},#{isColorBack},#{monthlyRent},#{mealStartDate},#{mealEndDate})
+    </insert>
+
+    <update id="updatePackageInformation" parameterType="com.domain.PackageInformation">
+        UPDATE PACKAGE_INFORMATION SET MEAL_NUMBER = #{mealNumber},MEAL_NAME = #{mealName},MEAL_DESCRIBE = #{mealDescribe},
+        MESSAGE_NUMBER = #{messageNumber},MINUTE_NUMBER = #{minuteNumber},FLOW_NUMBER = #{flowNumber},UNIT = #{unit},
+        IS_CALL = #{isCall},IS_COLOR_BACK = #{isColorBack},MONTHLY_RENT=#{monthlyRent},MEAL_START_DATE = #{mealStartDate},
+        MEAL_END_DATE = #{mealEndDate} WHERE ID = #{id}
+    </update>
+
+    <delete id="deletePackageInformation" parameterType="com.domain.PackageInformation">
+        DELETE FROM PACKAGE_INFORMATION WHERE id = #{id}
+    </delete>
+
+    <select id="getPackageInformation" resultType="com.domain.PackageInformation" resultMap="packageInformation" parameterType="com.domain.PackageInformation">
+        SELECT <include refid="allColumns"/> FROM PACKAGE_INFORMATION WHERE id=#{id}
+    </select>
+</mapper>

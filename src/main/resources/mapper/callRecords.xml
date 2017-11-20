@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.domain.CallRecords">
+    <resultMap id="callRecords" type="com.domain.CallRecords">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <!--<result property="callCustomer" column="CALL_CUSTOMER_ID" jdbcType="BIGINT"/>-->
+        <!--<result property="answerCustomer" column="ANSWER_CUSTOMER_ID" jdbcType="BIGINT"/>-->
+        <result property="callDuration" column="CALL_DURATION" jdbcType="BIGINT"/>
+        <result property="consumption" column="CONSUMPTION" jdbcType="DECIMAL"/>
+        <result property="startCallTime" column="START_CALL_TIME" jdbcType="TIMESTAMP"/>
+        <result property="endCallTime" column="END_CALL_TIME" jdbcType="TIMESTAMP"/>
+        <result property="callType" column="CALL_TYPE" jdbcType="BIT"/>
+        <result property="isAnswer" column="IS_ANSWER" jdbcType="BOOLEAN"/>
+        <result property="dialType" column="DIAL_TYPE" jdbcType="BIT"/>
+        <association property="callCustomer" column="CALL_CUSTOMER_ID" javaType="com.domain.Customer">
+            <id property="id" column="CALL_ID" jdbcType="BIGINT"/>
+            <result property="name" column="CALL_NAME" jdbcType="VARCHAR"/>
+            <result property="phoneCode" column="CALL_PHONE_CODE" jdbcType="VARCHAR"/>
+            <result property="sex" column="CALL_SEX" jdbcType="VARCHAR"/>
+            <result property="idCard" column="CALL_ID_CARD" jdbcType="VARCHAR"/>
+            <result property="address" column="CALL_ADDRESS" jdbcType="VARCHAR"/>
+            <result property="balance" column="CALL_BALANCE" jdbcType="DECIMAL"/>
+            <result property="isShutdown" column="CALL_IS_SHUTDOWN" jdbcType="BOOLEAN"/>
+            <result property="isStopArrears" column="CALL_IS_STOP_ARREARS" jdbcType="BOOLEAN"/>
+            <result property="starStates" column="CALL_STAR_STATES" jdbcType="BIT"/>
+        </association>
+        <association property="answerCustomer" column="ANSWER_CUSTOMER_ID" javaType="com.domain.Customer">
+            <id property="id" column="ANSWER_ID" jdbcType="BIGINT"/>
+            <result property="name" column="ANSWER_NAME" jdbcType="VARCHAR"/>
+            <result property="phoneCode" column="ANSWER_PHONE_CODE" jdbcType="VARCHAR"/>
+            <result property="sex" column="ANSWER_SEX" jdbcType="VARCHAR"/>
+            <result property="idCard" column="ANSWER_ID_CARD" jdbcType="VARCHAR"/>
+            <result property="address" column="ANSWER_ADDRESS" jdbcType="VARCHAR"/>
+            <result property="balance" column="ANSWER_BALANCE" jdbcType="DECIMAL"/>
+            <result property="isShutdown" column="ANSWER_IS_SHUTDOWN" jdbcType="BOOLEAN"/>
+            <result property="isStopArrears" column="ANSWER_IS_STOP_ARREARS" jdbcType="BOOLEAN"/>
+            <result property="starStates" column="ANSWER_STAR_STATES" jdbcType="BIT"/>
+        </association>
+    </resultMap>
+
+    <sql id="allColumns">
+        cr.ID ID,cr.CALL_CUSTOMER_ID CALL_CUSTOMER_ID,cr.ANSWER_CUSTOMER_ID ANSWER_CUSTOMER_ID,
+        cr.CALL_DURATION CALL_DURATION,cr.CONSUMPTION CONSUMPTION,cr.START_CALL_TIME START_CALL_TIME,
+        cr.END_CALL_TIME END_CALL_TIME,cr.CALL_TYPE CALL_TYPE,cr.IS_ANSWER IS_ANSWER,cr.DIAL_TYPE DIAL_TYPE,
+    </sql>
+    <sql id="callCustomerColumns">
+        cuc.ID CALL_ID,cuc.NAME CALL_NAME,cuc.PHONE_CODE CALL_PHONE_CODE,cuc.SEX CALL_SEX,
+        cuc.ID_CARD CALL_ID_CARD,cuc.ADDRESS CALL_ADDRESS,cuc.BALANCE CALL_BALANCE,
+        cuc.IS_SHUTDOWN CALL_IS_SHUTDOWN,cuc.IS_STOP_ARREARS CALL_IS_ARREARS,cuc.STAR_STATES CALL_STAR_STATES,
+    </sql>
+    <sql id="answerCustomerColumns">
+        cua.ID ANSWER_ID,cua.NAME ANSWER_NAME,cua.PHONE_CODE ANSWER_PHONE_CODE,cua.SEX ANSWER_SEX,
+        cua.ID_CARD ANSWER_ID_CARD,cua.ADDRESS ANSWER_ADDRESS,cua.BALANCE ANSWER_BALANCE,
+        cua.IS_SHUTDOWN ANSWER_IS_SHUTDOWN,cua.IS_STOP_ARREARS ANSWER_IS_ARREARS,cua.STAR_STATES ANSWER_STAR_STATES
+    </sql>
+
+    <sql id="insertColumns">
+        CALL_CUSTOMER_ID,ANSWER_CUSTOMER_ID,START_CALL_TIME,CALL_TYPE,IS_ANSWER,DIAL_TYPE
+    </sql>
+
+    <!--通过客户ID左联查询改客户的所有通话记录信息-->
+    <select id="getAllCallRecords" resultType="com.domain.CallRecords" resultMap="callRecords" parameterType="java.lang.Long">
+        SELECT<include refid="allColumns"/><include refid="callCustomerColumns"/><include refid="answerCustomerColumns"/>
+        FROM call_records cr
+        INNER JOIN customer cuc ON cr.CALL_CUSTOMER_ID = cuc.ID
+        INNER JOIN customer cua ON cr.ANSWER_CUSTOMER_ID = cua.ID
+        WHERE cuc.ID = #{0} AND DIAL_TYPE = 1 OR cua.ID = #{0} AND DIAL_TYPE = 2
+    </select>
+
+
+    <insert id="insertCallRecords" useGeneratedKeys="true" keyProperty="id" parameterType="com.domain.CallRecords">
+        INSERT INTO call_records(CALL_CUSTOMER_ID,ANSWER_CUSTOMER_ID,START_CALL_TIME,CALL_TYPE,IS_ANSWER,DIAL_TYPE) VALUES
+        (#{callCustomer.id},#{answerCustomer.id},#{startCallTime},#{callType},#{isAnswer},#{dialType})
+    </insert>
+
+    <update id="updateCallRecords" parameterType="com.domain.CallRecords">
+        UPDATE CALL_RECORDS SET CALL_CUSTOMER_ID = #{callCustomer.id},ANSWER_CUSTOMER_ID = #{answerCustomer.id},CALL_DURATION = #{callDuration},
+        CONSUMPTION = #{consumption},START_CALL_TIME = #{startCallTime},END_CALL_TIME = #{endCallTime},CALL_TYPE = #{callType},
+        IS_ANSWER = #{isAnswer},DIAL_TYPE = #{dialType}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteCallRecords" parameterType="java.lang.Long">
+         DELETE FROM CALL_RECORDS WHERE id = #{0}
+    </delete>
+
+    <select id="getCallRecords" resultType="com.domain.CallRecords" resultMap="callRecords" parameterType="java.lang.Long">
+        SELECT<include refid="allColumns"/><include refid="callCustomerColumns"/><include refid="answerCustomerColumns"/>
+        FROM call_records cr
+        LEFT JOIN customer cuc ON cr.CALL_CUSTOMER_ID = cuc.ID
+        LEFT JOIN customer cua ON cr.ANSWER_CUSTOMER_ID = cua.ID
+        WHERE cr.id=#{0}
+    </select>
+
+</mapper>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>测试验证框架</title>
+    <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../js/formValidator/formValidator-4.0.1.js"></script>
+    <script type="text/javascript" src="../js/formValidator/formValidatorRegex.js"></script>
+</head>
+<body>
+<form id="MyForm" action="#" method="post">
+    <input id="test" type="text"/>
+    <div id="testTip"></div>
+    <input id="price" type="text"/>
+    <div id="priceTip"></div>
+    <input type="submit" value="提交">
+    <input type="reset" value="重置">
+</form>
+
+<script type="text/javascript">
+    $(function(){
+        $.formValidator.initConfig({formID:"MyForm",debug:true,onSuccess:function(){
+            alert("验证通过");
+        },onError:function(){
+            alert("验证有误")
+        }});
+        $("#test").formValidator({onFocus:"焦点提示"}).inputValidator({min:4,max:10,onError:"错误是提示"});
+        $("#price").formValidator({}).regexValidator({regExp:"price",dataType:"enum",onError:"价格不对"});
+
+    });
+
+
+</script>
+
+
+</body>
+</html>

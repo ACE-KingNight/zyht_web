@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.domain.Messages">
+    <resultMap id="messages" type="com.domain.Messages">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="consumption" column="CONSUMPTION" jdbcType="DECIMAL"/>
+        <result property="sendMessagesTime" column="SEND_MESSAGES_TIME" jdbcType="TIMESTAMP"/>
+        <result property="receiveMessagesTime" column="RECEIVE_MESSAGES_TIME" jdbcType="TIMESTAMP"/>
+        <result property="messagesType" column="MESSAGES_TYPE" jdbcType="BIT"/>
+        <result property="isReceive" column="IS_RECEIVE" jdbcType="BOOLEAN"/>
+        <result property="messageContent" column="MESSAGE_CONTENT" jdbcType="VARCHAR"/>
+        <result property="customerType" column="CUSTOMER_TYPE" jdbcType="BOOLEAN"/>
+        <association property="sendCustomer" column="SEND_CUSTOMER_ID" javaType="com.domain.Customer">
+            <id property="id" column="SEND_ID" jdbcType="BIGINT"/>
+            <result property="name" column="SEND_NAME" jdbcType="VARCHAR"/>
+            <result property="phoneCode" column="SEND_PHONE_CODE" jdbcType="VARCHAR"/>
+            <result property="sex" column="SEND_SEX" jdbcType="VARCHAR"/>
+            <result property="idCard" column="SEND_ID_CARD" jdbcType="VARCHAR"/>
+            <result property="address" column="SEND_ADDRESS" jdbcType="VARCHAR"/>
+            <result property="balance" column="SEND_BALANCE" jdbcType="DECIMAL"/>
+            <result property="isShutdown" column="SEND_IS_SHUTDOWN" jdbcType="BOOLEAN"/>
+            <result property="isStopArrears" column="SEND_IS_STOP_ARREARS" jdbcType="BOOLEAN"/>
+            <result property="starStates" column="SEND_STAR_STATES" jdbcType="BIT"/>
+        </association>
+        <association property="receiveCustomer" column="RECEIVE_CUSTOMER_ID" javaType="com.domain.Customer">
+            <id property="id" column="RECEIVE_ID" jdbcType="BIGINT"/>
+            <result property="name" column="RECEIVE_NAME" jdbcType="VARCHAR"/>
+            <result property="phoneCode" column="RECEIVE_PHONE_CODE" jdbcType="VARCHAR"/>
+            <result property="sex" column="RECEIVE_SEX" jdbcType="VARCHAR"/>
+            <result property="idCard" column="RECEIVE_ID_CARD" jdbcType="VARCHAR"/>
+            <result property="address" column="RECEIVE_ADDRESS" jdbcType="VARCHAR"/>
+            <result property="balance" column="RECEIVE_BALANCE" jdbcType="DECIMAL"/>
+            <result property="isShutdown" column="RECEIVE_IS_SHUTDOWN" jdbcType="BOOLEAN"/>
+            <result property="isStopArrears" column="RECEIVE_CIS_STOP_ARREARS" jdbcType="BOOLEAN"/>
+            <result property="starStates" column="RECEIVE_STAR_STATES" jdbcType="BIT"/>
+        </association>
+    </resultMap>
+
+    <sql id="allColumns">
+        me.SEND_CUSTOMER_ID SEND_CUSTOMER_ID,me.RECEIVE_CUSTOMER_ID RECEIVE_CUSTOMER_ID,me.CONSUMPTION CONSUMPTION,me.SEND_MESSAGES_TIME SEND_MESSAGES_TIME,
+        me.RECEIVE_MESSAGES_TIME RECEIVE_MESSAGES_TIME,me.MESSAGES_TYPE MESSAGES_TYPE,
+        me.IS_RECEIVE IS_RECEIVE,me.MESSAGE_CONTENT MESSAGE_CONTENT,me.CUSTOMER_TYPE CUSTOMER_TYPE,
+    </sql>
+    <sql id="sendCustomerColumns">
+        cus.ID SEND_ID,cus.NAME SEND_NAME,cus.PHONE_CODE SEND_PHONE_CODE,cus.SEX SEND_SEX,
+        cus.ID_CARD SEND_ID_CARD,cus.ADDRESS SEND_ADDRESS,cus.BALANCE SEND_BALANCE,
+        cus.IS_SHUTDOWN SEND_IS_SHUTDOWN,cus.IS_STOP_ARREARS SEND_IS_ARREARS,cus.STAR_STATES SEND_STAR_STATES,
+    </sql>
+    <sql id="receiveCustomerColumns">
+        cur.ID RECEIVE_ID,cur.NAME RECEIVE_NAME,cur.PHONE_CODE RECEIVE_PHONE_CODE,cur.SEX RECEIVE_SEX,
+        cur.ID_CARD RECEIVE_ID_CARD,cur.ADDRESS RECEIVE_ADDRESS,cur.BALANCE RECEIVE_BALANCE,
+        cur.IS_SHUTDOWN RECEIVE_IS_SHUTDOWN,cur.IS_STOP_ARREARS RECEIVE_IS_ARREARS,cur.STAR_STATES RECEIVE_STAR_STATES
+    </sql>
+    <sql id="insertColumns">
+        SEND_CUSTOMER_ID,RECEIVE_CUSTOMER_ID,CONSUMPTION,SEND_MESSAGES_TIME,
+        RECEIVE_MESSAGES_TIME,MESSAGES_TYPE,IS_RECEIVE,MESSAGE_CONTENT,CUSTOMER_TYPE
+    </sql>
+
+    <select id="getAllMessages" resultType="com.domain.Messages" resultMap="messages" parameterType="java.lang.Long">
+        SELECT<include refid="allColumns"/><include refid="sendCustomerColumns"/><include refid="receiveCustomerColumns"/>
+        FROM messages me
+        LEFT JOIN customer cus ON me.SEND_CUSTOMER_ID = cus.ID
+        LEFT JOIN customer cur ON me.RECEIVE_CUSTOMER_ID = cur.ID
+        WHERE cus.ID = #{0} AND CUSTOMER_TYPE = 1 OR cur.ID = #{0} AND CUSTOMER_TYPE = 2
+    </select>
+
+    <insert id="insertMessages" parameterType="com.domain.Messages">
+        INSERT INTO messages(<include refid="insertColumns"/>) VALUES (#{sendCustomer.id},#{receiveCustomer.id},#{consumption},#{sendMessagesTime},#{receiveMessagesTime},
+        #{messagesType},#{isReceive},#{messageContent},#{customerType})
+    </insert>
+
+</mapper>

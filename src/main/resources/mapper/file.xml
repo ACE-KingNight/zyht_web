@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.domain.File">
+    <resultMap id="file" type="com.domain.File">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="fileName" column="FILE_NAME" jdbcType="VARCHAR"/>
+        <result property="fileLength" column="FILE_LENGTH" jdbcType="VARCHAR"/>
+        <result property="fileType" column="FILE_TYPE" jdbcType="VARCHAR"/>
+        <result property="filePath" column="FILE_PATH" jdbcType="VARCHAR"/>
+        <result property="packageInformationId" column="PACKAGE_INFORMATION_ID" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="allColumns">
+        ID,FILE_NAME,FILE_LENGTH,FILE_TYPE,FILE_PATH,PACKAGE_INFORMATION_ID
+    </sql>
+    <sql id="insertColumns">
+        FILE_NAME,FILE_LENGTH,FILE_TYPE,FILE_PATH,PACKAGE_INFORMATION_ID
+    </sql>
+
+    <select id="getFile" resultMap="file" resultType="com.domain.File" parameterType="java.lang.Long">
+        SELECT ID,FILE_NAME,FILE_LENGTH,FILE_TYPE,FILE_PATH,PACKAGE_INFORMATION_ID FROM FILE WHERE ID=#{0}
+    </select>
+
+    <insert id="insertFile" parameterType="com.domain.File">
+        INSERT INTO FILE(<include refid="insertColumns"/>) VALUES
+        (#{fileName},#{fileLength},#{fileType},#{filePath},#{packageInformationId})
+    </insert>
+</mapper>
